@@ -29,7 +29,7 @@ type TaskManager struct {
 // NewTaskManager creates a new task manager
 func NewTaskManager() *TaskManager {
 	return &TaskManager{
-		tasks:  make(map[int]*Task),
+		tasks:  make(map[int]Task),
 		nextID: 1,
 	}
 }
@@ -46,16 +46,13 @@ func (tm *TaskManager) AddTask(title, description string) (*Task, error) {
 		Done:        false,
 		CreatedAt:   time.Now(),
 	}
-	tm.tasks[tm.nextID] = task
+	tm.tasks[tm.nextID] = *task
 	tm.nextID++
 	return task, nil
 }
 
 // UpdateTask updates an existing task, returns an error if the title is empty or the task is not found
 func (tm *TaskManager) UpdateTask(id int, title, description string, done bool) error {
-	if id <= 0 {
-		return ErrInvalidID
-	}
 	task, exists := tm.tasks[id]
 	if !exists {
 		return ErrTaskNotFound
@@ -71,9 +68,6 @@ func (tm *TaskManager) UpdateTask(id int, title, description string, done bool) 
 
 // DeleteTask removes a task from the manager, returns an error if the task is not found
 func (tm *TaskManager) DeleteTask(id int) error {
-	if id <= 0 {
-		return ErrInvalidID
-	}
 	if _, exists := tm.tasks[id]; !exists {
 		return ErrTaskNotFound
 	}
@@ -83,14 +77,11 @@ func (tm *TaskManager) DeleteTask(id int) error {
 
 // GetTask retrieves a task by ID
 func (tm *TaskManager) GetTask(id int) (*Task, error) {
-	if id <= 0 {
-		return nil, ErrInvalidID
-	}
 	task, exists := tm.tasks[id]
 	if !exists {
 		return nil, ErrTaskNotFound
 	}
-	return task, nil
+	return &task, nil
 }
 
 // ListTasks returns all tasks, optionally filtered by done status
@@ -98,7 +89,7 @@ func (tm *TaskManager) ListTasks(filterDone *bool) []*Task {
 	var result []*Task
 	for _, task := range tm.tasks {
 		if filterDone == nil || task.Done == *filterDone {
-			result = append(result, task)
+			result = append(result, &task)
 		}
 	}
 	return result
