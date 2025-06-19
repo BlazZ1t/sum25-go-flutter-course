@@ -30,32 +30,33 @@ class _CounterAppState extends State<CounterApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Counter App'),
-        actions: [
-          // TODO: add a refresh button with Icon(Icons.refresh)
-        ],
+    return Container(
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+          border: BoxBorder.fromBorderSide(BorderSide(color: Colors.black12)),
+        boxShadow: [BoxShadow(color: Colors.black12)]
       ),
-      body: Center(
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              '$_counter',
-              style: const TextStyle(fontSize: 48),
-            ),
-            const SizedBox(height: 32),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // TODO: add a decrement button with Icon(Icons.remove) and onPressed: _decrementCounter
-                
-                const SizedBox(width: 32),
-                // TODO: add a increment button with Icon(Icons.add) and onPressed: _incrementCounter
-                
+                const Text('Counter'),
+                Text(': $_counter')
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(onPressed: _increment, icon: const Icon(Icons.add)),
+                IconButton(onPressed: _decrement, icon: const Icon(Icons.remove)),
+                IconButton(onPressed: _reset, icon: const Icon(Icons.refresh))
+              ],
+            )
           ],
         ),
       ),
