@@ -16,53 +16,27 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Card(
+      margin: const EdgeInsets.all(16.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              name,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            CircleAvatar(child: profilePicture())
+            // TODO: add a CircleAvatar with radius 50 and backgroundImage NetworkImage(avatarUrl!) if url is not null and text name[0].toUpperCase() if url is null
+
+            const SizedBox(height: 16),
+            // TODO: add a Text with name and style fontSize: 24, fontWeight: FontWeight.bold
+
+            const SizedBox(height: 8),
+            // TODO: add a Text with Age: $age and style fontSize: 16
+
+            const SizedBox(height: 8),
+            // TODO: add a Text with email and style fontSize: 16, color: Colors.grey
+
           ],
         ),
-        Text(
-          email,
-          style: const TextStyle(fontWeight: FontWeight.w300),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'Age: $age',
-          style: const TextStyle(fontWeight: FontWeight.w300),
-        )
-      ],
+      ),
     );
   }
-
-  Widget profilePicture() {
-    if (avatarUrl == null) {
-      return Text(name[0]);
-    }
-    return Image.network(
-      avatarUrl!,
-      width: 40,
-      height: 40,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) =>
-         Text(name[0]),
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) return child;
-        return const SizedBox(
-          width: 40,
-          height: 40,
-          child: CircularProgressIndicator(strokeWidth: 2),
-        );
-      },
-    );
-  }
-
 }

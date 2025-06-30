@@ -13,11 +13,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  String? _nameError;
-  String? _emailError;
-  String? _passwordError;
-  String? _successMessage;
-
   @override
   void dispose() {
     _nameController.dispose();
@@ -26,86 +21,78 @@ class _RegistrationFormState extends State<RegistrationForm> {
     super.dispose();
   }
 
-  bool isValidEmail(String email) {
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    return emailRegex.hasMatch(email);
-  }
-
   void _submitForm() {
-    setState(() {
-      _nameError = _emailError = _passwordError = _successMessage = null;
-
-      final name = _nameController.text;
-      final email = _emailController.text;
-      final password = _passwordController.text;
-
-      bool hasError = false;
-
-      if (name.isEmpty) {
-        _nameError = 'Please enter your name';
-        hasError = true;
-      }
-
-      if (email.isEmpty || !isValidEmail(email)) {
-        _emailError = 'Please enter a valid email';
-        hasError = true;
-      }
-
-      if (password.length < 6) {
-        _passwordError = 'Password must be at least 6 characters';
-        hasError = true;
-      }
-
-      if (!hasError) {
-        _nameController.clear();
-        _emailController.clear();
-        _passwordController.clear();
-        _successMessage = 'Registration successful!';
-      }
-    });
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Registration successful!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      _formKey.currentState!.reset();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          key: const Key('name'),
-          controller: _nameController,
-          decoration: InputDecoration(
-            hintText: 'Name',
-            errorText: _nameError,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Registration Form'),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  key: const Key('name'),
+                  // TODO: use _nameController
+                  decoration: const InputDecoration(
+                    labelText: 'Name',
+                    hintText: 'Enter your name',
+                  ),
+                  validator: (value) {
+                    // TODO: validate if value is not null or empty and return 'Please enter your name'
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  key: const Key('email'),
+                  // TODO: use _emailController
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    hintText: 'Enter your email',
+                  ),
+                  validator: (value) {
+                    // TODO: validate if value is not null or empty and it match word@word.word, return 'Please enter a valid email'
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  key: const Key('password'),
+                  // TODO: use _passwordController
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    hintText: 'Enter your password',
+                  ),
+                  obscureText: true,
+                  validator: (value) {
+                    // TODO: validate if value is not null or empty and it has at least 6 characters, return 'Password must be at least 6 characters'
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 32),
+                // TODO: add a ElevatedButton with onPressed: _submitForm and child: Text('Submit')
+              ],
+            ),
           ),
         ),
-        TextField(
-          key: const Key('email'),
-          controller: _emailController,
-          decoration: InputDecoration(
-            hintText: 'Email',
-            errorText: _emailError,
-          ),
-        ),
-        TextField(
-          key: const Key('password'),
-          controller: _passwordController,
-          obscureText: true,
-          decoration: InputDecoration(
-            hintText: 'Password',
-            errorText: _passwordError,
-          ),
-        ),
-        const SizedBox(height: 12),
-        TextButton(
-          onPressed: _submitForm,
-          child: const Text('Submit'),
-        ),
-        if (_successMessage != null)
-          Text(
-            _successMessage!,
-            key: const Key('successMessage'),
-            style: const TextStyle(color: Colors.green),
-          ),
-      ],
+      ),
     );
   }
 }
