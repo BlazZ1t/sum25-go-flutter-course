@@ -17,23 +17,39 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(16.0),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // TODO: add a CircleAvatar with radius 50 and backgroundImage NetworkImage(avatarUrl!) if url is not null and text name[0].toUpperCase() if url is null
-
-            const SizedBox(height: 16),
-            // TODO: add a Text with name and style fontSize: 24, fontWeight: FontWeight.bold
-
-            const SizedBox(height: 8),
-            // TODO: add a Text with Age: $age and style fontSize: 16
-
-            const SizedBox(height: 8),
-            // TODO: add a Text with email and style fontSize: 16, color: Colors.grey
-
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  name.isNotEmpty ? name : '?',
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                if (avatarUrl != null)
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(avatarUrl!),
+                  ),
+                if (avatarUrl == null)
+                  CircleAvatar(
+                    child: name.isNotEmpty ? Text(name.characters.first) : const Text(''),
+                  ),
+              ],
+            ),
+            Text(
+              email,
+              style: const TextStyle(color: Colors.grey, fontSize: 16),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Age: $age',
+              style: const TextStyle(color: Colors.grey, fontSize: 16),
+            )
           ],
         ),
       ),
