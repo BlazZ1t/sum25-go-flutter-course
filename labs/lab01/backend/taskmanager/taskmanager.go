@@ -53,16 +53,18 @@ func (tm *TaskManager) AddTask(title, description string) (*Task, error) {
 
 // UpdateTask updates an existing task, returns an error if the title is empty or the task is not found
 func (tm *TaskManager) UpdateTask(id int, title, description string, done bool) error {
+	if title == "" {
+		return ErrEmptyTitle
+	}
 	task, exists := tm.tasks[id]
 	if !exists {
 		return ErrTaskNotFound
 	}
-	if title == "" {
-		return ErrEmptyTitle
-	}
+
 	task.Title = title
 	task.Description = description
 	task.Done = done
+	tm.tasks[id] = task // Write back to the map
 	return nil
 }
 

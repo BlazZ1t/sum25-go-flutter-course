@@ -49,22 +49,22 @@ func NewUser(name string, age int, email string) (*User, error) {
 
 // String returns a string representation of the user, formatted as "Name: <name>, Age: <age>, Email: <email>"
 func (u *User) String() string {
-	return fmt.Sprintf("User {Name: %s, Age: %d, Email: %s}", u.Name, u.Age, u.Email)
+	return fmt.Sprintf("Name: %s, Age: %d, Email: %s", u.Name, u.Age, u.Email)
 }
 
 // IsValidEmail checks if the email format is valid
-// You can use regexp.MustCompile to compile the email regex
 func IsValidEmail(email string) bool {
-	re := regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
+	re := regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}$`)
 	return re.MatchString(email)
 }
 
-// IsValidName checks if the name is valid, returns false if the name is empty or longer than 30 characters
+// IsValidName checks if the name is valid: non-empty and at most 30 characters
 func IsValidName(name string) bool {
-	return !(strings.TrimSpace(name) == "")
+	trimmed := strings.TrimSpace(name)
+	return trimmed != "" && len(trimmed) <= 30
 }
 
-// IsValidAge checks if the age is valid, returns false if the age is not between 0 and 150
+// IsValidAge checks if the age is valid: between 0 and 150 inclusive
 func IsValidAge(age int) bool {
-	return !(age < 0 || age > 150)
+	return age >= 0 && age <= 150
 }
