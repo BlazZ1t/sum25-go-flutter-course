@@ -55,6 +55,9 @@ func (b *Broker) Run() {
 }
 
 func (b *Broker) SendMessage(msg Message) error {
+	if b.ctx.Err() != nil {
+		return errors.New("broker is shutting down")
+	}
 	select {
 	case b.input <- msg:
 		return nil
